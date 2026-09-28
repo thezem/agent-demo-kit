@@ -2,11 +2,11 @@
 
 Watchable, URL-triggered demos for React apps. A demo runs in the user's browser against the rendered UI and can report its result to a local CLI listener. It is intended for development and review, not production traffic.
 
-The project is currently a **private source preview**. The npm package name and publishing flow are not yet public. The [standalone HTML landing page](landing/index.html) and the permanent **dim elegant** visual system in [DESIGN.md](DESIGN.md) are included in this repository.
+This is a **public source preview**. The package has not been published to the npm registry. The [standalone HTML landing page](landing/index.html) and permanent **Notion-like dim elegant** visual system in [DESIGN.md](DESIGN.md) are included in this repository.
 
 ## Quick start
 
-Clone the private repository and build the package:
+Clone the repository and build the package:
 
 ```sh
 git clone https://github.com/thezem/agent-demo-kit.git
@@ -45,13 +45,24 @@ import projectSearch from "./demos/project-search";
 
 Start your dev server normally, then open `http://localhost:5173/?demo=project-search`. The browser runs the demo and displays progress. The card has a **Delay before each action** slider from Instant to 5 seconds. You can change it while the demo runs; the next action uses the new value. The setting is saved in local storage and survives page navigation. The `paceMs` prop sets the initial delay if the viewer has not chosen one. `enabled` defaults to `false`; deliberately enable it only in development. For non-Vite builds, use that bundler's development flag.
 
-For a machine-readable result, start the listener first:
+For a machine-readable result, run the CLI from the React project after starting its dev server:
 
 ```sh
-npx agent-demo listen --demo project-search --url http://localhost:5173/ --json demo-result.json
+npx agent-demo run --demo project-search --url http://localhost:5173/ --json demo-result.json
 ```
 
-Open the exact URL it prints. The listener prints each step, writes JSON if requested, and exits `0` for pass or `1` for fail/timeout. It binds to `127.0.0.1` and accepts one result with a per-run token. The browser sends the result only when `demoRun` is present.
+`run` starts a local listener and opens the exact demo URL in the machine's default user-facing browser. The CLI prints each step, writes JSON if requested, and exits `0` for pass or `1` for fail/timeout. The agent can read this result without controlling or inspecting the browser. If the machine has no desktop browser opener, the CLI prints the URL so a person can open it. Use `listen` when you want to open the printed URL yourself or choose a different browser. The listener binds to `127.0.0.1` and accepts one result with a per-run token. The browser sends the result only when `demoRun` is present.
+
+## Instructions for AI agents
+
+For a React feature that can be exercised through this API, use a demo as the **development review and E2E check** instead of starting an agent-controlled Playwright session for every change:
+
+1. Add one small demo file beside the feature. Write real DOM actions and at least one assertion for the outcome the user needs to verify. Prefer accessible roles and names. Keep the sequence safe to repeat against development data.
+2. Register it in `<DemoRunner demos={[...]} enabled={import.meta.env.DEV} />` near the app root. Start the project's normal dev server and leave it running.
+3. Run `npx agent-demo run --demo YOUR_ID --url http://localhost:YOUR_PORT/ --json demo-result.json`. The CLI opens the URL in the user's default browser. To use a specific browser, run `listen` instead and open its printed URL there. **Do not inspect or drive the browser after opening the URL** for this check; wait for the CLI result.
+4. Treat exit code `0` plus the recorded assertions as the evidence. On failure, fix the application or the demo's locator and rerun. Give the human the same demo URL for watchable review, and report which assertions passed rather than saying only that the page loaded.
+
+The browser and CLI listener must run on the same machine for the default `127.0.0.1` result channel. A remote browser needs an appropriate local forwarding setup. This flow covers the DOM actions in the API below; keep Playwright or another browser tool for cross-browser testing, screenshots, network inspection, complex input, and unsupported flows.
 
 ## API
 

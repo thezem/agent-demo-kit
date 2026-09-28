@@ -3,57 +3,104 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#17191d">
-  <meta name="description" content="agent-demo-kit lets React features demonstrate themselves in the browser and report checked results to a local CLI.">
+  <meta name="theme-color" content="#1f1f1f">
+  <meta name="description" content="agent-demo-kit gives React features a watchable browser demo and a checked CLI result from one URL.">
   <title>agent-demo-kit — Let the work show itself</title>
-  <style>
-    @font-face{font-family:Nimbus;src:url('./assets/nimbus-sans-regular.otf') format('opentype');font-weight:400;font-display:swap}
-    @font-face{font-family:Nimbus;src:url('./assets/nimbus-sans-bold.otf') format('opentype');font-weight:700;font-display:swap}
-    @font-face{font-family:Mono;src:url('./assets/dejavu-mono.ttf') format('truetype');font-display:swap}
-    :root{--page:#17191d;--field:#202329;--panel:#282c32;--ink:#f1f0ed;--muted:#a9abb2;--line:#3a3d45;--accent:#c6bfdf;--focus:#dcd4ff;color-scheme:dark}
-    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--page);color:var(--ink);font:16px Nimbus,Arial,sans-serif}button{font:inherit;cursor:pointer}a{color:inherit}::selection{background:#514b65;color:#fff}a:focus-visible,button:focus-visible{outline:2px solid var(--focus);outline-offset:4px}.wrap{width:min(100% - 64px,1420px);margin-inline:auto}
-    .head{height:75px;display:flex;align-items:center;justify-content:space-between;gap:24px;border-bottom:1px solid var(--line)}.brand{text-decoration:none;font-size:19px;font-weight:700;letter-spacing:-.045em;white-space:nowrap}.brand i{font-style:normal;color:var(--accent)}.nav{display:flex;align-items:center;gap:32px}.nav a{text-decoration:none;color:var(--muted);font-size:13px}.nav a:hover{color:var(--ink)}.head-link{font-size:12px;text-decoration:none;border:1px solid #5a5d67;border-radius:999px;padding:10px 17px;white-space:nowrap}.head-link:hover{background:var(--panel)}
-    .eyebrow{font-size:11px;letter-spacing:.14em;color:var(--accent)}.hero{padding:98px 0 84px}.hero-top{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(300px,.85fr);gap:6vw;align-items:end}.hero h1{font-weight:400;font-size:clamp(62px,7.6vw,116px);letter-spacing:-.055em;line-height:.92;margin:25px 0 0;max-width:850px}.hero h1 em{font-style:normal;color:var(--accent)}.hero-intro{padding-bottom:9px}.hero-intro p{font-size:clamp(20px,1.8vw,26px);line-height:1.3;letter-spacing:-.02em;margin:0 0 28px;max-width:440px}.hero-intro small{display:block;color:var(--muted);font-size:13px;line-height:1.5;margin-top:15px}.actions{display:flex;gap:10px;flex-wrap:wrap}.button{display:inline-flex;align-items:center;justify-content:center;text-decoration:none;min-height:43px;padding:11px 19px;border:1px solid var(--ink);border-radius:999px;background:var(--ink);color:var(--page);font-size:13px;transition:transform .2s,background .2s}.button:hover{transform:translateY(-2px);background:#dcd9d7}.button.secondary{background:transparent;color:var(--ink);border-color:#777984}.button.secondary:hover{background:var(--panel)}.button:focus-visible{outline:2px solid var(--focus)}
-    .proof{margin:93px 0 0;position:relative}.proof-frame{background:var(--field);border:1px solid #454850;border-radius:20px;padding:10px;box-shadow:0 35px 100px #0004}.proof-frame img{display:block;width:100%;height:auto;border-radius:11px}.proof-caption{display:flex;justify-content:space-between;gap:20px;padding:17px 5px 0;color:var(--muted);font-size:12px}.proof-caption span:first-child{color:var(--ink)}
-    .statement{padding:132px 0;display:grid;grid-template-columns:1fr 2.1fr;gap:6vw;border-bottom:1px solid var(--line)}.statement h2{font-size:clamp(39px,4.8vw,70px);font-weight:400;letter-spacing:-.045em;line-height:1.04;margin:0}.statement h2 span{color:var(--muted)}
-    .flow{padding:115px 0 130px}.section-head{display:flex;justify-content:space-between;gap:30px;align-items:end;margin-bottom:62px}.section-head h2{font-size:clamp(48px,5.5vw,77px);font-weight:400;letter-spacing:-.05em;line-height:1;margin:14px 0 0}.section-head p{color:var(--muted);font-size:17px;line-height:1.4;max-width:390px;margin:0}.flow-list{border-top:1px solid var(--line)}.flow-row{display:grid;grid-template-columns:80px minmax(200px,.8fr) minmax(0,1.2fr);gap:28px;align-items:baseline;border-bottom:1px solid var(--line);padding:27px 0}.flow-num{font:13px Mono,monospace;color:var(--accent)}.flow-row h3{font-size:25px;font-weight:400;letter-spacing:-.03em;margin:0}.flow-row p{color:var(--muted);font-size:16px;line-height:1.45;margin:0;max-width:590px}
-    .technical{background:var(--field);padding:119px 0 125px}.technical-inner{display:grid;grid-template-columns:minmax(0,.86fr) minmax(0,1.14fr);gap:8vw}.technical h2{font-weight:400;font-size:clamp(46px,5vw,72px);line-height:1.04;letter-spacing:-.045em;margin:19px 0 26px}.technical p{font-size:18px;color:var(--muted);line-height:1.45;max-width:470px}.technical .small-note{font-size:13px;margin-top:35px}.code-stack{display:grid;gap:17px;align-content:start}.code-block{border:1px solid #4a4d56;background:#1a1c21;border-radius:19px;overflow:hidden}.code-head{padding:13px 20px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;color:#bbb9c5;font:12px Mono,monospace}.copy{border:0;background:transparent;color:var(--muted);font:12px Nimbus,sans-serif;padding:4px 2px}.copy:hover{color:var(--ink)}pre{margin:0;padding:24px 20px 26px;overflow:auto;color:#e8e6ed;font:13px/1.65 Mono,monospace;tab-size:2}pre .key{color:var(--accent)}pre .quiet{color:#899099}.result{padding:22px 24px;border:1px solid #4a4d56;border-radius:19px;background:#25282f}.result-label{color:var(--accent);font:11px Mono,monospace;letter-spacing:.05em}.result strong{display:block;font-size:27px;font-weight:400;letter-spacing:-.03em;margin:14px 0 8px}.result p{font-size:13px;margin:0;color:var(--muted)}
-    .closing{padding:142px 0 136px;display:grid;grid-template-columns:1.4fr .6fr;gap:6vw;align-items:end}.closing h2{font-size:clamp(54px,6.7vw,95px);font-weight:400;line-height:.99;letter-spacing:-.05em;margin:17px 0 0}.closing p{color:var(--muted);font-size:17px;line-height:1.45;max-width:370px}.closing .button{margin-top:20px}.foot{border-top:1px solid var(--line);min-height:95px;display:flex;justify-content:space-between;align-items:center;gap:20px;color:var(--muted);font-size:12px}.foot strong{font-size:16px;color:var(--ink)}.foot a{text-decoration:none}.foot a:hover{text-decoration:underline}
-    @media(max-width:900px){.nav{gap:15px}.hero-top,.technical-inner{grid-template-columns:1fr}.hero-intro{max-width:630px}.hero-intro p{max-width:630px}.proof{margin-top:60px}.statement{grid-template-columns:1fr;gap:32px}.flow-row{grid-template-columns:55px 1fr}.flow-row p{grid-column:2}.closing{grid-template-columns:1fr;gap:20px}}
-    @media(max-width:767px){.wrap{width:min(100% - 36px,1420px)}.head{height:65px}.nav{display:none}.hero{padding:75px 0 70px}.hero h1{font-size:clamp(57px,12vw,86px)}.hero-intro{margin-top:35px}.proof{margin-top:55px}.proof-frame{border-radius:14px;padding:6px}.proof-frame img{border-radius:8px}.proof-caption{display:block;line-height:1.5}.proof-caption span{display:block}.statement{padding:90px 0}.flow{padding:85px 0}.section-head{display:block;margin-bottom:35px}.section-head p{margin-top:22px}.flow-row{gap:16px}.technical{padding:90px 0}.technical-inner{gap:42px}.closing{padding:94px 0}.foot{padding:25px 0;min-height:0;display:block}.foot span{display:block;margin-top:10px}}
-    @media(max-width:420px){.head-link{padding:8px 11px}.brand{font-size:17px}.hero h1{font-size:55px}.flow-row{grid-template-columns:40px 1fr}.flow-row h3{font-size:22px}pre{font-size:11px;padding:18px}.code-head{padding:12px 18px}}
-    @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{transition-duration:.01ms!important;animation-duration:.01ms!important}}
-  </style>
+  <link rel="stylesheet" href="./style.css">
 </head>
 <body>
   <header class="head wrap" id="top">
-    <a class="brand" href="#top">agent<i>·</i>demo<i>·</i>kit</a>
-    <nav class="nav" aria-label="Main navigation"><a href="#why">Why it exists</a><a href="#workflow">Workflow</a><a href="#source">Source</a></nav>
-    <a class="head-link" href="https://github.com/thezem/agent-demo-kit">View repository</a>
+    <a class="brand" href="#top"><span class="brand-symbol" aria-hidden="true"><i></i><i></i><i></i></span>agent-demo-kit</a>
+    <nav class="nav" aria-label="Main navigation"><a href="#why">Why</a><a href="#flow">How it works</a><a href="#source">Source</a></nav>
+    <a class="head-link" href="https://github.com/thezem/agent-demo-kit">GitHub <span aria-hidden="true">↗</span></a>
   </header>
+
   <main>
     <section class="hero wrap" aria-labelledby="hero-title">
-      <div class="hero-top"><div><div class="eyebrow">A SMALL REACT TOOL · PRIVATE PREVIEW</div><h1 id="hero-title">Let the work <em>show itself.</em></h1></div><div class="hero-intro"><p>Your agent builds the feature. One URL lets you watch it work, step by step.</p><div class="actions"><a class="button" href="http://localhost:5173/?demo=launch-review">Watch local example</a><a class="button secondary" href="#workflow">See how it works</a></div><small>The example link needs the included dev server running on port 5173.</small></div></div>
-      <figure class="proof"><div class="proof-frame"><img src="./assets/demo-board.png" width="1280" height="760" alt="Actual included sample app on its project board, with agent-demo-kit running a filter action and showing its speed control"></div><figcaption class="proof-caption"><span>A real frame from the included 35-step walkthrough.</span><span>Project board · browser playback · adjustable delay</span></figcaption></figure>
+      <div class="hero-copy"><div class="kicker">A SMALL TOOL FOR REACT PROJECTS</div><h1 id="hero-title">Let the work<br><span>show itself.</span></h1><p>Agents can build a feature fast. Now they can leave behind a demo you can watch, and a result you can check.</p><div class="hero-actions"><a class="button primary" href="http://localhost:5173/?demo=launch-review">Watch the local example</a><a class="button secondary" href="#flow">See the workflow</a></div><small>The example link works when the included dev server is running.</small></div>
+
+      <div class="diagram" aria-label="Diagram: an agent-authored script triggers a browser demo and sends checked results to a CLI">
+        <div class="diagram-label">ONE SCRIPT · ONE URL · TWO WAYS TO REVIEW</div>
+        <svg class="diagram-lines" viewBox="0 0 1200 540" preserveAspectRatio="none" aria-hidden="true">
+          <path class="line-base" d="M156 128 H412 C449 128 456 182 499 182"></path>
+          <path class="line-flow" d="M156 128 H412 C449 128 456 182 499 182"></path>
+          <path class="line-base" d="M702 182 C748 182 752 127 794 127 H1054"></path>
+          <path class="line-flow line-two" d="M702 182 C748 182 752 127 794 127 H1054"></path>
+          <path class="line-base" d="M600 359 V447 H1054"></path>
+          <path class="line-flow line-three" d="M600 359 V447 H1054"></path>
+          <circle class="signal" r="4"><animateMotion dur="4s" repeatCount="indefinite" path="M156 128 H412 C449 128 456 182 499 182"></animateMotion></circle>
+          <circle class="signal signal-two" r="4"><animateMotion dur="4s" repeatCount="indefinite" path="M702 182 C748 182 752 127 794 127 H1054"></animateMotion></circle>
+          <circle class="signal signal-three" r="4"><animateMotion dur="4s" repeatCount="indefinite" path="M600 359 V447 H1054"></animateMotion></circle>
+        </svg>
+        <div class="diagram-node node-agent"><span class="node-index">01 / AUTHOR</span><strong>The agent writes<br>a short demo.</strong><code>demo('launch-review', ...)</code></div>
+        <div class="diagram-node node-browser"><span class="node-index">02 / WATCH</span><strong>Your browser<br>runs the UI.</strong><code>?demo=launch-review</code></div>
+        <div class="diagram-node node-cli"><span class="node-index">03 / VERIFY</span><strong>The CLI gets<br>a checked result.</strong><code>PASS · 35 steps</code></div>
+
+        <div class="demo-card" aria-label="Interactive preview of the agent demo card">
+          <div class="demo-card-head"><span class="card-mark" aria-hidden="true"><i></i><i></i><i></i></span><span class="card-brand">agent demo<small>INTERACTIVE PREVIEW</small></span><span class="card-running"><i></i><span id="preview-state">running</span></span></div>
+          <div class="demo-card-main"><div class="card-overline" id="preview-step-number">STEP 1</div><div class="card-current" id="preview-step">Open the project board</div><div class="card-id">launch-review</div></div>
+          <div class="card-metrics"><span><b id="preview-done">0</b><small>steps done</small></span><span><b id="preview-checks">0</b><small>checks</small></span><span><b id="preview-time">0.0s</b><small>elapsed</small></span></div>
+          <div class="card-recent"><div class="card-overline">RECENT</div><div class="card-recent-item" id="preview-recent">Waiting for the first action</div></div>
+          <div class="card-speed"><label for="preview-delay">Delay before each action <strong id="preview-delay-value">0.8s</strong></label><input id="preview-delay" type="range" min="0" max="5000" step="100" value="800"><div class="card-scale"><span>Instant</span><span>5 seconds</span></div></div>
+          <div class="card-actions"><button type="button" id="preview-toggle">Pause preview</button><span>Illustrated flow</span></div>
+        </div>
+        <div class="diagram-footnote">This diagram illustrates the included browser and CLI workflow. <a href="http://localhost:5173/?demo=launch-review">Run the actual example locally</a>.</div>
+      </div>
     </section>
-    <section class="statement wrap" id="why"><div class="eyebrow">THE IDEA</div><h2>Review the behavior <span>while it happens.</span> Keep the explanation for when you need it.</h2></section>
-    <section class="flow wrap" id="workflow"><div class="section-head"><div><div class="eyebrow">ONE DEMO, TWO AUDIENCES</div><h2>From code to clarity.</h2></div><p>Agent-authored actions run against the actual rendered UI. The same sequence serves human review and a checked CLI result.</p></div><div class="flow-list"><div class="flow-row"><span class="flow-num">01</span><h3>Author a small script</h3><p>The agent adds DOM actions and explicit assertions beside the React feature. No separate browser automation suite is required for this path.</p></div><div class="flow-row"><span class="flow-num">02</span><h3>Open the normal dev URL</h3><p>Append <code>?demo=launch-review</code>. Watch navigation, clicks, typing, and checks in your own browser. Change the delay on the card while it runs.</p></div><div class="flow-row"><span class="flow-num">03</span><h3>Collect a concrete result</h3><p>A local listener receives the final status, every step, and a JSON artifact. Missing or ambiguous elements fail with a specific reason.</p></div></div></section>
-    <section class="technical" id="source"><div class="technical-inner wrap"><div><div class="eyebrow">SMALL BY DESIGN</div><h2>Readable for people.<br>Structured for agents.</h2><p>The browser runs the demo. The package adds a React entry point, a focused action API, a quiet playback card, and an optional local CLI listener.</p><p class="small-note">A pass verifies the assertions the demo actually makes. It does not claim that every part of a feature has been tested.</p><a class="button secondary" href="https://github.com/thezem/agent-demo-kit">Explore private source</a></div><div class="code-stack"><div class="code-block"><div class="code-head"><span>demos/launch-review.ts</span><button class="copy" type="button" data-copy="script">Copy code</button></div><pre id="script"><code><span class="key">const</span> review = demo('launch-review', <span class="key">async</span> ({ page }) =&gt; {
-  <span class="key">await</span> page.goto('/workspace');
-  <span class="key">await</span> page.getByRole('button', { name: 'Board' }).click();
-  <span class="key">await</span> page.getByRole('heading', { name: 'Ready' })
+
+    <section class="thesis wrap" id="why"><span class="section-index">THE POINT</span><h2>Review the behavior <span>while it happens.</span> Keep the prose for when you need it.</h2></section>
+
+    <section class="flow wrap" id="flow"><div class="flow-head"><div><span class="section-index">FOR HUMANS AND AGENTS</span><h2>A small handoff<br>that does more.</h2></div><p>One agent-authored sequence drives a visible review and reports its assertions to a local process.</p></div><div class="flow-rows"><div class="flow-row"><span>01</span><h3>Author</h3><p>Add a focused demo beside the feature. Use DOM actions and assertions that prove the behavior you want reviewed.</p></div><div class="flow-row"><span>02</span><h3>Watch</h3><p>Start the existing dev server. Open the printed URL in any user-facing browser on the same machine. The app navigates and acts on its own.</p></div><div class="flow-row"><span>03</span><h3>Read the result</h3><p>Leave the browser alone. The local CLI receives a step-by-step result and exits successfully only when the scripted checks pass.</p></div></div></section>
+
+    <section class="source" id="source"><div class="source-inner wrap"><div class="source-copy"><span class="section-index">READABLE BY DESIGN</span><h2>A demo is just<br>small code.</h2><p>The browser performs real clicks and fills. A local listener collects the outcome. No separate test browser is needed for this supported development workflow.</p><p class="source-note">A passing demo verifies its own assertions. It does not replace browser automation for cross-browser suites, screenshots, network inspection, or flows outside this API.</p><a class="button secondary" href="https://github.com/thezem/agent-demo-kit">Read the source <span aria-hidden="true">↗</span></a></div><div class="source-stack"><div class="code-panel"><div class="code-top"><span>demos/launch-review.ts</span><button class="copy" type="button" data-copy="sample-code">Copy</button></div><pre id="sample-code"><code>import { demo } from 'agent-demo-kit';
+
+export default demo('launch-review', async ({ page }) =&gt; {
+  await page.goto('/workspace');
+  await page.getByRole('button', { name: 'Board' }).click();
+  await page.getByRole('heading', { name: 'Ready' })
     .expectVisible();
-});</code></pre></div><div class="code-block"><div class="code-head"><span>local CLI</span><button class="copy" type="button" data-copy="command">Copy command</button></div><pre id="command"><code>agent-demo listen --demo launch-review \
-  --url http://localhost:5173/ --json result.json</code></pre></div><div class="result"><span class="result-label">EXAMPLE RUN · INCLUDED IN REPOSITORY</span><strong>PASS · 35 steps</strong><p>Full navigation, visible checks, CLI JSON, and a zero exit code in the included Chrome E2E run.</p></div></div></div></section>
-    <section class="closing wrap"><div><div class="eyebrow">PRIVATE SOURCE PREVIEW</div><h2>Make the next change<br>easy to see.</h2></div><div><p>The repository includes the package, the React example, the standalone landing page, and a repeatable browser run.</p><a class="button" href="https://github.com/thezem/agent-demo-kit">Open repository</a></div></section>
+});</code></pre></div><div class="code-panel"><div class="code-top"><span>local CLI</span><button class="copy" type="button" data-copy="sample-command">Copy</button></div><pre id="sample-command"><code>agent-demo listen --demo launch-review \
+  --url http://localhost:5173/ --json result.json</code></pre></div><div class="result-line"><span class="result-icon" aria-hidden="true">✓</span><span><strong>PASS · 35 steps</strong><small>Verified in the included Chrome end-to-end run.</small></span></div></div></div></section>
+
+    <section class="close wrap"><div><span class="section-index">OPEN SOURCE</span><h2>Make the next change<br>easy to see.</h2></div><div><p>The repository includes the package, the React example, this site, and a repeatable browser run.</p><a class="button primary" href="https://github.com/thezem/agent-demo-kit">Open the repository</a></div></section>
   </main>
-  <footer class="foot wrap"><strong>agent·demo·kit</strong><span>Built for demos you can watch and checks you can inspect. <a href="https://github.com/thezem/agent-demo-kit">Source on GitHub</a></span></footer>
+  <footer class="foot wrap"><strong>agent-demo-kit</strong><span>Watch the work. Inspect the checks. <a href="https://github.com/thezem/agent-demo-kit">Source on GitHub</a></span></footer>
+
   <script>
+    const steps = [
+      ['Open the project board', 0], ['Filter the tasks', 0], ['Check the ready column', 1],
+      ['Create a review task', 0], ['Move it into progress', 0], ['Check the new status', 1],
+      ['Post a progress note', 0], ['Check project activity', 1]
+    ];
+    const preview = { index: 0, done: 0, checks: 0, running: !matchMedia('(prefers-reduced-motion: reduce)').matches, started: Date.now(), timer: null };
+    const stepEl = document.getElementById('preview-step');
+    const delayEl = document.getElementById('preview-delay');
+    const toggleEl = document.getElementById('preview-toggle');
+    if (!preview.running) { toggleEl.textContent = 'Play preview'; document.getElementById('preview-state').textContent = 'paused'; }
+    function delayLabel(value) { return Number(value) === 0 ? 'Instant' : (Number(value) / 1000).toFixed(1) + 's'; }
+    function schedulePreview() {
+      clearTimeout(preview.timer);
+      if (!preview.running) return;
+      preview.timer = setTimeout(() => {
+        document.getElementById('preview-recent').textContent = '✓ ' + steps[preview.index][0];
+        preview.done += 1;
+        preview.checks += steps[preview.index][1];
+        preview.index = (preview.index + 1) % steps.length;
+        stepEl.textContent = steps[preview.index][0];
+        document.getElementById('preview-step-number').textContent = 'STEP ' + (preview.done + 1);
+        document.getElementById('preview-done').textContent = preview.done;
+        document.getElementById('preview-checks').textContent = preview.checks;
+        document.getElementById('preview-time').textContent = ((Date.now() - preview.started) / 1000).toFixed(1) + 's';
+        schedulePreview();
+      }, Math.max(900, Number(delayEl.value) + 600));
+    }
+    delayEl.addEventListener('input', () => { document.getElementById('preview-delay-value').textContent = delayLabel(delayEl.value); schedulePreview(); });
+    toggleEl.addEventListener('click', () => { preview.running = !preview.running; toggleEl.textContent = preview.running ? 'Pause preview' : 'Resume preview'; document.getElementById('preview-state').textContent = preview.running ? 'running' : 'paused'; schedulePreview(); });
+    schedulePreview();
     document.querySelectorAll('[data-copy]').forEach(button => button.addEventListener('click', async () => {
-      const target = document.getElementById(button.dataset.copy === 'script' ? 'script' : 'command');
-      try { await navigator.clipboard.writeText(target.innerText); button.textContent = 'Copied'; }
-      catch { button.textContent = 'Select and copy'; }
-      setTimeout(() => { button.textContent = button.dataset.copy === 'script' ? 'Copy code' : 'Copy command'; }, 1800);
+      try { await navigator.clipboard.writeText(document.getElementById(button.dataset.copy).innerText); button.textContent = 'Copied'; }
+      catch { button.textContent = 'Select text'; }
+      setTimeout(() => { button.textContent = 'Copy'; }, 1600);
     }));
   </script>
 </body>

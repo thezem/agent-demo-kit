@@ -2,12 +2,13 @@
 import { createServer } from "node:http";
 import { randomUUID } from "node:crypto";
 import { writeFile } from "node:fs/promises";
+import { spawn } from "node:child_process";
 import type { DemoResult } from "./index.js";
 
 const args = process.argv.slice(2);
 const option = (name: string) => { const i = args.indexOf(name); return i < 0 ? undefined : args[i + 1]; };
-if (args[0] !== "listen" || !option("--demo")) {
-  console.error("Usage: agent-demo listen --demo ID [--url http://localhost:5173/] [--port 4179] [--timeout 120] [--json FILE]");
+if (!["listen", "run"].includes(args[0]) || !option("--demo")) {
+  console.error("Usage: agent-demo run|listen --demo ID [--url http://localhost:5173/] [--port 4179] [--timeout 120] [--json FILE]");
   process.exit(2);
 }
 const id = option("--demo")!;
@@ -57,4 +58,15 @@ async function finish(result: DemoResult) {
 }
 const timer = setTimeout(() => { console.error(`Timed out waiting for demo ${id}`); server.close(); process.exitCode = 1; }, timeout * 1000);
 server.on("error", error => { console.error(error.message); process.exitCode = 2; });
-server.listen(port, "127.0.0.1", () => { console.log(`Open this URL to run the demo:\n${target.href}\nWaiting for ${id}...`); });
+server.listen(port, "127.0.0.1", () => {
+  console.log(`Demo URL:\n${target.href}\nWaiting for ${id}...`);
+  if (args[0] === "run") openBrowser(target.href);
+});
+
+function openBrowser(url: string) {
+  const command = process.platform === "darwin" ? "open" : process.platform === "win32" ? "cmd" : "xdg-open";
+  const commandArgs = process.platform === "win32" ? ["/c", "start", "", url] : [url];
+  const opener = spawn(command, commandArgs, { stdio: "ignore", detached: true });
+  opener.on("error", error => console.error(`Could not open the default browser (${error.message}). Open the printed URL in a browser on this machine.`));
+  opener.unref();
+}
