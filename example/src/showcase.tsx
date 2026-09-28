@@ -49,7 +49,7 @@ async function walkthrough({ page, show }: DemoContext) {
   await page.getByText("Mobile flow checked. Payment step needs one clearer label.").expectVisible();
   await show("The task, status and note are visible. Review complete.");
 }
-const demos = [demo("launch-review", walkthrough), demo("project-search", walkthrough)];
+const demos = [demo("launch-review", walkthrough), demo("project-search", walkthrough), demo("launch-review-no-cursor", walkthrough)];
 
 function App() {
   const project = location.pathname.startsWith("/workspace/apollo");
@@ -86,7 +86,7 @@ function App() {
     </div>
     {creating && <div className="scrim" onMouseDown={event => { if (event.target === event.currentTarget) setCreating(false); }}><form className="dialog" role="dialog" aria-modal="true" aria-labelledby="create-heading" onSubmit={createTask}><div className="dialog-top"><div className="eyebrow">APOLLO LAUNCH</div><button type="button" className="close" aria-label="Close dialog" onClick={() => setCreating(false)}>×</button></div><h2 id="create-heading">Create a task</h2><p>Give the next reviewer enough context to act.</p><label htmlFor="task-title">Task title</label><input id="task-title" autoFocus required placeholder="What needs to be done?" value={title} onChange={event => setTitle(event.target.value)} /><label htmlFor="task-description">Context</label><textarea id="task-description" rows={4} placeholder="Add the context a teammate needs" value={description} onChange={event => setDescription(event.target.value)} /><div className="dialog-actions"><button type="button" className="outline" onClick={() => setCreating(false)}>Cancel</button><button className="solid" type="submit">Create task</button></div></form></div>}
     {selected && <div className="drawer-layer" onMouseDown={event => { if (event.target === event.currentTarget) setSelectedId(null); }}><aside className="drawer" aria-label="Task details"><div className="dialog-top"><div className="eyebrow">TASK DETAILS</div><button className="close" aria-label="Close task" onClick={() => setSelectedId(null)}>×</button></div><h2>{selected.title}</h2><p>{selected.description}</p><div className="detail-line"><span>Status</span><span className={`status ${selected.status === "In progress" ? "working" : ""}`}>{selected.status}</span></div>{selected.status === "Ready" && <button className="solid start" onClick={startWork}>Start work</button>}<section className="notes"><h3>Notes</h3>{(notes[selected.id] ?? []).length ? (notes[selected.id] ?? []).map((text, index) => <div className="note" key={index}>{text}</div>) : <p>No notes yet. Add the first update.</p>}<form onSubmit={postNote}><textarea aria-label="Write a progress note" rows={3} placeholder="Write a progress note" value={note} onChange={event => setNote(event.target.value)} /><button className="outline">Post note</button></form></section></aside></div>}
-    <DemoRunner demos={demos} enabled={import.meta.env.DEV} paceMs={800} />
+    <DemoRunner demos={demos} enabled={import.meta.env.DEV} paceMs={800} port={Number(import.meta.env.VITE_AGENT_DEMO_PORT) || 4179} showCursor={new URLSearchParams(location.search).get("demo") !== "launch-review-no-cursor"} />
   </div>;
 }
 createRoot(document.getElementById("root")!).render(<React.StrictMode><App /></React.StrictMode>);

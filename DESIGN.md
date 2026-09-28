@@ -40,3 +40,5 @@ No blue-purple gradient, glow, decorative grid, or blanket glass treatment. Use 
 ## Scope
 
 Use this system for `landing/`, future docs, and the package-owned demo card. The `example/` app intentionally represents a third-party product with its own Fieldnotes visual identity.
+
+The in-page agent cursor is part of the kit UI: an ivory pointer, a pale lavender nameplate, and a brief click ring. Keep it above the host app but below the demo card, never intercept pointer events, and remove its motion when the user prefers reduced motion.

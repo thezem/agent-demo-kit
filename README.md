@@ -43,7 +43,7 @@ import projectSearch from "./demos/project-search";
 </>
 ```
 
-Start your dev server normally, then open `http://localhost:5173/?demo=project-search`. The browser runs the demo and displays progress. The card has a **Delay before each action** slider from Instant to 5 seconds. You can change it while the demo runs; the next action uses the new value. The setting is saved in local storage and survives page navigation. The `paceMs` prop sets the initial delay if the viewer has not chosen one. `enabled` defaults to `false`; deliberately enable it only in development. For non-Vite builds, use that bundler's development flag.
+Start your dev server normally, then open `http://localhost:5173/?demo=project-search`. The browser runs the demo and displays progress. By default, an in-page **agent cursor** moves to the elements being clicked or filled, shows a click pulse, types into inputs, and signals route navigation. It does not replace or control the operating system cursor. Set `<DemoRunner showCursor={false} ... />` to disable it; actions then run without cursor animation. The card has a **Delay before each action** slider from Instant to 5 seconds. You can change it while the demo runs; the next action uses the new value. The setting is saved in local storage and survives page navigation. The `paceMs` prop sets the initial delay if the viewer has not chosen one. `enabled` defaults to `false`; deliberately enable it only in development. For non-Vite builds, use that bundler's development flag.
 
 For a machine-readable result, run the CLI from the React project after starting its dev server:
 
@@ -71,12 +71,13 @@ The browser and CLI listener must run on the same machine for the default `127.0
 - `page.getByRole(role, { name })`, `getByPlaceholder(text)`, `getByText(text)`, and `locator(css)` find visible elements. Multiple matches fail so a misleading element is not chosen silently.
 - Locators support `click()`, `fill(value)`, `expectVisible()`, and `expectText(text)`.
 - `show(message)` displays a narration step.
+- `DemoRunner` shows the agent cursor by default. `showCursor={false}` opts out. The cursor follows `goto`, `click`, and `fill` actions and respects reduced-motion preferences.
 - At least one assertion is required for a pass.
 - The runner emits a `agent-demo:result` document event with a `DemoResult` in `event.detail` after each step and at completion.
 
 ## Scope and limitations
 
-The checks run in the actual page, but this is a deliberately small browser API, not a replacement for Playwright. `fill()` supports native inputs and textareas. Accessible-name matching supports common elements, `aria-label`, `aria-labelledby`, and input labels; it does not implement the full accessibility-name specification. Links on the same origin perform a full navigation so the runner can resume reliably. Demo steps should avoid irreversible actions and use development data. A passing demo verifies only its scripted assertions.
+The checks run in the actual page, but this is a deliberately small browser API, not a replacement for Playwright. `fill()` supports native inputs and textareas. Accessible-name matching supports common elements, `aria-label`, `aria-labelledby`, and input labels; it does not implement the full accessibility-name specification. Links on the same origin perform a full navigation so the runner can resume reliably. The cursor is rendered inside the page, so it cannot move over browser chrome or mimic operating-system interaction. Demo steps should avoid irreversible actions and use development data. A passing demo verifies only its scripted assertions.
 
 The CLI result channel is designed for a local HTTP dev server. If the app is served over HTTPS, browser mixed-content restrictions may block reporting to the local HTTP listener; the on-page result still works.
 

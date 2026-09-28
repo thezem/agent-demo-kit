@@ -2,6 +2,12 @@ export type DemoStatus = "running" | "passed" | "failed" | "stopped";
 export type StepResult = { label: string; kind: "action" | "assertion" | "note"; status: "passed" | "failed"; durationMs: number; error?: string };
 export type DemoResult = { version: 1; id: string; status: DemoStatus; url: string; durationMs: number; steps: StepResult[]; error?: string };
 export type Demo = { id: string; run: (context: DemoContext) => Promise<void> };
+export type DemoVisuals = {
+  moveTo(element: Element, mode: "pointer" | "text", signal: AbortSignal): Promise<void>;
+  press(signal: AbortSignal): Promise<void>;
+  type(signal: AbortSignal): Promise<void>;
+  navigate(path: string, signal: AbortSignal): Promise<void>;
+};
 
 export type Locator = {
   click(): Promise<void>;
@@ -58,7 +64,7 @@ async function findElement(find: () => Element[], description: string, signal: A
   throw new Error(`Timed out after ${timeout}ms waiting for ${description} at ${location.pathname}`);
 }
 
-export function runDemo(selected: Demo, update: Update, signal: AbortSignal, getDelayMs: () => number = () => 400): void {
+export function runDemo(selected: Demo, update: Update, signal: AbortSignal, getDelayMs: () => number = () => 400, visuals?: DemoVisuals): void {
   const key = `agent-demo:${selected.id}:${new URLSearchParams(location.search).get("demoRun") ?? "manual"}`;
   let progress: Progress;
   try { progress = JSON.parse(sessionStorage.getItem(key) ?? "null") || { next: 0, steps: [], startedAt: Date.now(), assertions: 0 }; }
@@ -111,6 +117,8 @@ export function runDemo(selected: Demo, update: Update, signal: AbortSignal, get
         const anchor = el.closest("a[href]") as HTMLAnchorElement | null;
         const target = anchor && anchor.origin === location.origin ? anchor.href : null;
         el.scrollIntoView({ block: "center", behavior: "smooth" });
+        await visuals?.moveTo(el, "pointer", signal);
+        await visuals?.press(signal);
         if (target) {
           const url = new URL(target);
           url.searchParams.set("demo", selected.id);
@@ -123,10 +131,21 @@ export function runDemo(selected: Demo, update: Update, signal: AbortSignal, get
     fill: value => step("action", `Fill ${description}`, async () => {
       const el = await findElement(find, description, signal);
       if (!(el instanceof HTMLInputElement || el instanceof HTMLTextAreaElement)) throw new Error(`${description} is not an input or textarea`);
+      el.scrollIntoView({ block: "center", behavior: "smooth" });
+      await visuals?.moveTo(el, "text", signal);
+      await visuals?.type(signal);
       el.focus();
       const setter = Object.getOwnPropertyDescriptor(el instanceof HTMLInputElement ? HTMLInputElement.prototype : HTMLTextAreaElement.prototype, "value")?.set;
-      setter?.call(el, value);
-      el.dispatchEvent(new Event("input", { bubbles: true }));
+      const write = (next: string) => { setter?.call(el, next); el.dispatchEvent(new Event("input", { bubbles: true })); };
+      if (visuals && value.length > 0) {
+        write("");
+        const perCharacterMs = Math.min(28, Math.max(8, Math.floor(1600 / value.length)));
+        for (let i = 1; i <= value.length; i++) {
+          if (signal.aborted) throw new Error("Demo stopped");
+          write(value.slice(0, i));
+          await new Promise(resolve => setTimeout(resolve, perCharacterMs));
+        }
+      } else write(value);
       el.dispatchEvent(new Event("change", { bubbles: true }));
     }),
     expectVisible: () => step("assertion", `Expect ${description} visible`, async () => { await findElement(find, description, signal); }),
@@ -143,6 +162,7 @@ export function runDemo(selected: Demo, update: Update, signal: AbortSignal, get
         target.searchParams.set("demo", selected.id);
         const run = new URLSearchParams(location.search).get("demoRun");
         if (run) target.searchParams.set("demoRun", run);
+        await visuals?.navigate(target.pathname, signal);
         return target.href;
       }),
       getByRole: (role, options) => makeLocator(() => Array.from(document.querySelectorAll(`${ROLES[role] ?? ""}${ROLES[role] ? "," : ""}[role="${CSS.escape(role)}"]`)).filter(el => {
