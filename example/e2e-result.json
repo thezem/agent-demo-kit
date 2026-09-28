@@ -1,0 +1,219 @@
+{
+  "version": 1,
+  "id": "launch-review",
+  "status": "passed",
+  "url": "http://localhost:36483/workspace/apollo?demo=launch-review&demoRun=53fe9cc4-b602-4589-91d3-f4cf342ec247",
+  "durationMs": 1225,
+  "steps": [
+    {
+      "label": "A complete launch review, performed in the real interface",
+      "kind": "note",
+      "status": "passed",
+      "durationMs": 1
+    },
+    {
+      "label": "Open /workspace",
+      "kind": "action",
+      "status": "passed",
+      "durationMs": 276
+    },
+    {
+      "label": "Expect heading named \"Your workspace\" visible",
+      "kind": "assertion",
+      "status": "passed",
+      "durationMs": 2
+    },
+    {
+      "label": "Click button named \"Search projects\"",
+      "kind": "action",
+      "status": "passed",
+      "durationMs": 29
+    },
+    {
+      "label": "Fill placeholder \"Find a project\"",
+      "kind": "action",
+      "status": "passed",
+      "durationMs": 12
+    },
+    {
+      "label": "Click link named \"Open Apollo launch\"",
+      "kind": "action",
+      "status": "passed",
+      "durationMs": 2
+    },
+    {
+      "label": "Expect heading named \"Apollo launch\" visible",
+      "kind": "assertion",
+      "status": "passed",
+      "durationMs": 1
+    },
+    {
+      "label": "Inspect the board before adding work",
+      "kind": "note",
+      "status": "passed",
+      "durationMs": 0
+    },
+    {
+      "label": "Click button named \"Board\"",
+      "kind": "action",
+      "status": "passed",
+      "durationMs": 30
+    },
+    {
+      "label": "Expect heading named \"Ready\" visible",
+      "kind": "assertion",
+      "status": "passed",
+      "durationMs": 16
+    },
+    {
+      "label": "Click button named \"Filter tasks\"",
+      "kind": "action",
+      "status": "passed",
+      "durationMs": 21
+    },
+    {
+      "label": "Fill placeholder \"Filter by task title\"",
+      "kind": "action",
+      "status": "passed",
+      "durationMs": 23
+    },
+    {
+      "label": "Expect button named \"Review launch page\" visible",
+      "kind": "assertion",
+      "status": "passed",
+      "durationMs": 3
+    },
+    {
+      "label": "Fill placeholder \"Filter by task title\"",
+      "kind": "action",
+      "status": "passed",
+      "durationMs": 23
+    },
+    {
+      "label": "Create the missing review task",
+      "kind": "note",
+      "status": "passed",
+      "durationMs": 0
+    },
+    {
+      "label": "Click button named \"New task\"",
+      "kind": "action",
+      "status": "passed",
+      "durationMs": 72
+    },
+    {
+      "label": "Expect heading named \"Create a task\" visible",
+      "kind": "assertion",
+      "status": "passed",
+      "durationMs": 0
+    },
+    {
+      "label": "Fill placeholder \"What needs to be done?\"",
+      "kind": "action",
+      "status": "passed",
+      "durationMs": 23
+    },
+    {
+      "label": "Fill placeholder \"Add the context a teammate needs\"",
+      "kind": "action",
+      "status": "passed",
+      "durationMs": 26
+    },
+    {
+      "label": "Click button named \"Create task\"",
+      "kind": "action",
+      "status": "passed",
+      "durationMs": 34
+    },
+    {
+      "label": "Expect button named \"Check mobile checkout\" visible",
+      "kind": "assertion",
+      "status": "passed",
+      "durationMs": 3
+    },
+    {
+      "label": "Click button named \"Check mobile checkout\"",
+      "kind": "action",
+      "status": "passed",
+      "durationMs": 32
+    },
+    {
+      "label": "Expect heading named \"Check mobile checkout\" visible",
+      "kind": "assertion",
+      "status": "passed",
+      "durationMs": 4
+    },
+    {
+      "label": "Move it into active work and leave a note",
+      "kind": "note",
+      "status": "passed",
+      "durationMs": 0
+    },
+    {
+      "label": "Click button named \"Start work\"",
+      "kind": "action",
+      "status": "passed",
+      "durationMs": 25
+    },
+    {
+      "label": "Expect selector \".drawer .status\" contains \"In progress\"",
+      "kind": "assertion",
+      "status": "passed",
+      "durationMs": 3
+    },
+    {
+      "label": "Fill placeholder \"Write a progress note\"",
+      "kind": "action",
+      "status": "passed",
+      "durationMs": 25
+    },
+    {
+      "label": "Click button named \"Post note\"",
+      "kind": "action",
+      "status": "passed",
+      "durationMs": 27
+    },
+    {
+      "label": "Expect text \"Mobile flow checked. Payment step needs one clearer label.\" visible",
+      "kind": "assertion",
+      "status": "passed",
+      "durationMs": 4
+    },
+    {
+      "label": "Click button named \"Close task\"",
+      "kind": "action",
+      "status": "passed",
+      "durationMs": 24
+    },
+    {
+      "label": "Verify the change in project activity",
+      "kind": "note",
+      "status": "passed",
+      "durationMs": 0
+    },
+    {
+      "label": "Click button named \"Activity\"",
+      "kind": "action",
+      "status": "passed",
+      "durationMs": 18
+    },
+    {
+      "label": "Expect heading named \"Project activity\" visible",
+      "kind": "assertion",
+      "status": "passed",
+      "durationMs": 2
+    },
+    {
+      "label": "Expect text \"Mobile flow checked. Payment step needs one clearer label.\" visible",
+      "kind": "assertion",
+      "status": "passed",
+      "durationMs": 1
+    },
+    {
+      "label": "The task, status and note are visible. Review complete.",
+      "kind": "note",
+      "status": "passed",
+      "durationMs": 0
+    }
+  ]
+}
